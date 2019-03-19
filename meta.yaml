@@ -1,0 +1,33 @@
+{% set name = 'lf' %}
+{% set build = 0 %}
+{% set version = '11' %}
+{% set pkg_src = 'src/github.com/gokcehan/lf' %}
+
+package:
+    name: {{name}}
+    version: {{version}}
+
+about:
+    home: https://github.com/gokcehan/lf
+    license: MIT
+    summary: Terminal file manager
+
+source:
+    folder: {{pkg_src}}
+    url: https://github.com/gokcehan/{{name}}/archive/r{{version}}.tar.gz
+    md5: b5cec7f993d5d2ae7031dcaf0cec5538
+
+requirements:
+    build:
+        - {{ compiler('go') }}
+
+build:
+    number: {{build}}
+    script:
+        - pushd {{pkg_src}}
+        - go get -d ./...
+        - go build
+        - install -d -m 755 $PREFIX/bin
+        - install -d -m 755 $PREFIX/share/man/man1
+        - install -m 755 lf $PREFIX/bin/lf 
+        - install -m 644 lf.1 $PREFIX/share/man/man1
